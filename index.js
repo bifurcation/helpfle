@@ -142,6 +142,20 @@ function filterWordList(wordList, cells) {
                  .map(x => x.join(""));
 };
 
+var doubleTapped = [];
+
+function doubleTap(i, j) {
+  let index = COLS*i + j;
+  if(!alreadyTapped[index]) {
+    tapedTwice = true;
+    setTimeout( function() { tapedTwice = false; }, 300 );
+    return false;
+  }
+  
+  event.preventDefault();
+  alert("double tap");
+}
+
 function load() {
   const guesses = document.getElementById("guesses");
   for (let i = 0; i < ROWS; i++) {
@@ -155,7 +169,8 @@ function load() {
       td.contentEditable = "true";;
 
       // Add event handlers
-      td.onkeydown = (e) => update(i, j, e);
+      td.addEventListener("keydown", (e) => update(i, j, e));
+      td.addEventListener("touchstart", (e) => doubleTap(i, j));
 
       tr.appendChild(td);
       cellRow.push({td, letter: "", state: 0});
